@@ -199,6 +199,11 @@ class PollController extends AbstractController {
 
         $minutes = intval($_POST['poll-minutes'] ?? 0);
 
+        if($hours < 0 || $minutes < 0)
+        {
+            $this->core->addErrorMessage('Invalid time given');
+            return new RedirectResponse($this->core->buildCourseUrl(['polls']));
+        }
         $duration = new DateInterval("PT{$hours}H{$minutes}M");
 
         $poll = new Poll($_POST['name'], $_POST['question'], $_POST['question_type'], $duration, $date, $_POST['release_histogram'], $_POST["release_answer"]);
